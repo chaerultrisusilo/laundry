@@ -4,7 +4,8 @@ if (isset($_POST['save'])) {
     $service_price = $_POST['service_price'];
     $service_desc = $_POST['service_desc'];
 
-    $insert = mysqli_query($koneksi, "INSERT INTO services (service_name, service_price, service_desc) VALUES ('$service_name', '$service_price', '$service_desc')");
+    $insert = mysqli_query($koneksi, "INSERT INTO services (service_name, service_price, service_desc) 
+    VALUES('$service_name','$service_price','$service_desc')");
     if ($insert) {
         header("location:?page=service&add=success");
     }

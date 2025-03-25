@@ -103,7 +103,56 @@ include 'koneksi.php';
 
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
+    <script src="assets/js/jquery-3.7.1.min.js"></script>
 
+    <!-- <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script> -->
+    <script>
+        $('#id_service').change(function() {
+            let id_service = $(this).val();
+            $.ajax({
+                url: "get-service.php?id_service=" + id_service,
+                method: "get",
+                dataType: "json",
+                success: function(res) {
+                    $('#service_price').val(res.data.service_price)
+                }
+            });
+        });
+        $('.add-row').click(function() {
+            let countDisplay = document.getElementById("countDisplay");
+            let currentCount = parseInt(countDisplay.value) || 0;
+
+            currentCount++;
+            countDisplay.value = currentCount;
+
+            let select = document.getElementById("id_service");
+            let selectOpt = select.options[select.selectedIndex];
+
+            let price = parseInt(selectOpt.getAttribute("data-price")) || 0;
+            console.log(price);
+
+            let service_name = $('#id_service').find("option:selected").text();
+            let service_price = $('#service_price').val();
+            let newRow = "";
+            newRow += "<tr>"
+            newRow += `<td> ${currentCount} </td>`;
+            newRow += `<td>  ${service_name} <input type='text' value='${service_name}' name='service_name[]'> </td>`;
+            newRow += `<td> ${service_price.toLocaleString()} <input type='number' name='subtotal[]' value='${service_price.toLocaleString()}'></td>`;
+            newRow += "<td><input class='form-control' name='qty[]' type='number'></td>";
+            newRow += "<td><input class='form-control' name='notes[]' type='text'></td>";
+            newRow += "<td><button type='button' class='btn btn-success btn-sm remove' id='remove'>Remove</button></td>";
+            newRow += "</tr>"
+
+            $('.table-order tbody').append(newRow);
+
+            $('.remove').click(function(event) {
+                event.preventDefault();
+                $(this).closest('tr').remove();
+            });
+        });
+    </script>
 </body>
 
 </html>
